@@ -2,15 +2,20 @@ package com.example.crudoperations.util
 
 import android.content.Context
 import android.service.autofill.UserData
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavController
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class SharedViewModel() : ViewModel() {
+
     fun saveData(
-        userData: UserData,
+        userData: com.example.crudoperations.util.UserData,
         context: Context
     ) = CoroutineScope(Dispatchers.IO).launch {
 
@@ -31,7 +36,7 @@ class SharedViewModel() : ViewModel() {
     fun retrieveData(
         userID: String,
         context: Context,
-        data: (UserData) -> Unit
+        data: (com.example.crudoperations.util.UserData) -> Unit
     ) = CoroutineScope(Dispatchers.IO).launch {
 
         val fireStoreRef = Firebase.firestore
@@ -43,7 +48,7 @@ class SharedViewModel() : ViewModel() {
                 .addOnSuccessListener {
                     // for getting single or particular document
                     if (it.exists()) {
-                        val userData = it.toObject<UserData>()!!
+                        val userData = it.toObject<com.example.crudoperations.util.UserData>()!!
                         data(userData)
                     } else {
                         Toast.makeText(context, "No User Data Found", Toast.LENGTH_SHORT).show()
